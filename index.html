@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>💕 Nuestro Espacio</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --rose: #c9788a;
+      --blush: #f5dde3;
+      --deep: #2a1a1f;
+      --cream: #fdf6f0;
+      --gold: #c8a96e;
+      --soft: #f0e6ea;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--deep);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Petals */
+    .petals {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .petal {
+      position: absolute;
+      opacity: 0;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-40px) rotate(0deg);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.55;
+      }
+
+      90% {
+        opacity: 0.35;
+      }
+
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* ════ LOGIN ════ */
+    .login-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--cream);
+      z-index: 500;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .login-logo {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      animation: pulse 2s ease-in-out infinite;
+      display: block;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        transform: scale(1)
+      }
+
+      50% {
+        transform: scale(1.12)
+      }
+    }
+
+    .login-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--rose);
+      margin-bottom: 6px;
+    }
+
+    .login-sub {
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 32px;
+    }
+
+    /* Saved card */
+    .saved-card {
+      background: #fff;
+      border: 1px solid rgba(201, 120, 138, 0.2);
+      border-radius: 18px;
+      padding: 18px 20px;
+      width: 100%;
+      max-width: 320px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 16px rgba(201, 120, 138, 0.08);
+    }
+
+    .saved-card:hover {
+      background: var(--blush);
+      box-shadow: 0 4px 20px rgba(201, 120, 138, 0.15);
+    }
+
+    .saved-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--rose);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .saved-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .saved-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--deep);
+    }
+
+    .saved-hint {
+      font-size: 0.68rem;
+      color: rgba(42, 26, 31, 0.4);
+      margin-top: 2px;
+    }
+
+    .saved-arrow {
+      color: var(--rose);
+      font-size: 1.3rem;
+    }
+
+    /* Login tabs */
+    .login-tabs {
+      display: flex;
+      width: 100%;
+      max-width: 320px;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(201, 120, 138, 0.25);
+      margin-bottom: 18px;
+    }
+
+    .ltab {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 10px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(42, 26, 31, 0.4);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .ltab.active {
+      background: var(--rose);
+      color: #fff;
+    }
+
+    .lpanel {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .lpanel.active {
+      display: flex;
+    }
+
+    .lfield input {
+      width: 320px;
+      max-width: 100%;
+      border: 1px solid rgba(201, 120, 138, 0.28);
+      border-radius: 12px;
+      padding: 13px 18px;
+      font-size: 0.95rem;
+      font-family: 'Jost', sans-serif;
+      outline: none;
+      color: var(--deep);
+      background: #fff;
+      transition: border-color 0.2s;
+      text-align: center;
+    }
+
+    .lfield input::placeholder {
+      color: rgba(42, 26, 31, 0.28);
+    }
+
+    .lfield input:focus {
+      border-color: var(--rose);
+    }
+
+    .lbtn {
+      background: var(--rose);
+      border: none;
+      border-radius: 14px;
+      color: #fff;
+      font-size: 0.95rem;
+      padding: 13px 0;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      letter-spacing: 0.08em;
+      width: 100%;
+      max-width: 320px;
+      transition: background 0.2s;
+    }
+
+    .lbtn:hover {
+      background: #b5697a;
+    }
+
+    /* ════ MAIN APP ════ */
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 0 80px;
+    }
+
+    header {
+      text-align: center;
+      padding: 36px 16px 20px;
+      background: linear-gradient(to bottom, rgba(245, 221, 227, 0.5), transparent);
+    }
+
+    .heart-anim {
+      font-size: 2.2rem;
+      animation: pulse 2s ease-in-out infinite;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .couple-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 6vw, 2.4rem);
+      font-weight: 300;
+      font-style: italic;
+      color: var(--rose);
+      letter-spacing: 0.02em;
+    }
+
+    .couple-sep {
+      color: var(--gold);
+      font-style: normal;
+      margin: 0 8px;
+    }
+
+    .header-sub {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid rgba(201, 120, 138, 0.2);
+      position: sticky;
+      top: 0;
+      background: var(--cream);
+      z-index: 100;
+    }
+
+    .tab-btn {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 14px 4px 12px;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(42, 26, 31, 0.4);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .tab-btn .ti {
+      font-size: 1.2rem;
+    }
+
+    .tab-btn.active {
+      color: var(--rose);
+      border-bottom-color: var(--rose);
+    }
+
+    .tab-panel {
+      display: none;
+      padding: 20px 16px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    /* Counter */
+    .counter-card {
+      background: var(--deep);
+      color: var(--blush);
+      border-radius: 24px;
+      padding: 32px 20px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .counter-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(201, 120, 138, 0.28) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(200, 169, 110, 0.18) 0%, transparent 50%);
+    }
+
+    .days-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(4rem, 20vw, 7rem);
+      font-weight: 300;
+      line-height: 1;
+      color: #fff;
+      position: relative;
+    }
+
+    .days-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 4px;
+      position: relative;
+    }
+
+    .since {
+      font-size: 0.78rem;
+      color: rgba(245, 221, 227, 0.6);
+      margin-top: 10px;
+      position: relative;
+    }
+
+    .since span {
+      color: var(--blush);
+      font-style: italic;
+    }
+
+    .precise {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 18px;
+      position: relative;
+    }
+
+    .tu {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tv {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.9rem;
+      font-weight: 300;
+      color: #fff;
+      line-height: 1;
+      min-width: 46px;
+      text-align: center;
+    }
+
+    .tl {
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 3px;
+    }
+
+    .ts {
+      font-size: 1.5rem;
+      color: rgba(201, 120, 138, 0.55);
+      align-self: flex-start;
+      margin-top: 3px;
+    }
+
+    .date-setter {
+      margin-top: 18px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .date-setter p {
+      font-size: 0.72rem;
+      color: rgba(245, 221, 227, 0.5);
+      letter-spacing: 0.08em;
+    }
+
+    .date-setter-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .date-setter input[type="date"] {
+      background: rgba(255, 255, 255, 0.09);
+      border: 1px solid rgba(201, 120, 138, 0.35);
+      border-radius: 8px;
+      color: var(--blush);
+      font-family: 'Jost', sans-serif;
+      font-size: 0.78rem;
+      padding: 6px 10px;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .date-setter input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+      cursor: pointer;
+    }
+
+    .date-setter button {
+      background: var(--rose);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 7px 16px;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      transition: background 0.2s;
+    }
+
+    .date-setter button:hover {
+      background: #b5697a;
+    }
+
+    /* Music */
+    .music-card {
+      background: var(--soft);
+      border-radius: 18px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    .music-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .music-disc {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      animation: spin 4s linear infinite paused;
+    }
+
+    .music-disc.playing {
+      animation-play-state: running;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .music-info {
+      flex: 1;
+      overflow: hidden;
+    }
+
+    .track-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--deep);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-sub {
+      font-size: 0.7rem;
+      color: var(--rose);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+
+    .music-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .mbtn {
+      background: var(--rose);
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .mbtn:hover {
+      background: #b5697a;
+      transform: scale(1.08);
+    }
+
+    .mbtn.mute-btn {
+      background: rgba(42, 26, 31, 0.15);
+      color: var(--deep);
+    }
+
+    .mbtn.mute-btn:hover {
+      background: rgba(42, 26, 31, 0.25);
+    }
+
+    .mbtn.mute-btn.muted {
+      background: var(--deep);
+      color: #fff;
+    }
+
+    /* YouTube embed */
+    .yt-wrap {
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 12px;
+      background: #000;
+      position: relative;
+      aspect-ratio: 16/9;
+      display: none;
+    }
+
+    .yt-wrap.visible {
+      display: block;
+    }
+
+    .yt-wrap iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+    }
+
+    .music-url-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .music-url-row input {
+      flex: 1;
+      border: 1px solid rgba(201, 120, 138, 0.3);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 0.78rem;
+      font-family: 'Jost', sans-serif;
+      background: #fff;
+      outline: none;
+      color: var(--deep);
+    }
+
+    .music-url-row button {
+      background: var(--gold);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: 'Jost', sans-serif;
+      white-space: nowrap;
+    }
+
+    .music-hint {
+      font-size: 0.68rem;
+      color: rgba(42, 26, 31, 0.38);
+      line-height: 1.6;
+      margin-top: 6px;
+    }
+
+    audio {
+      display: none;
+    }
+
+    /* Messages */
+    .msg-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+      max-height: calc(100vh - 280px);
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 18px;
+      max-width: 82%;
+      animation: fadeUp 0.35s ease both;
+      line-height: 1.55;
+      font-size: 0.9rem;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    .msg-bubble.mine {
+      background: var(--rose);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 4px;
+    }
+
+    .msg-bubble.theirs {
+      background: var(--soft);
+      color: var(--deep);
+      align-self: flex-start;
+      border-bottom-left-radius: 4px;
+    }
+
+    .msg-meta {
+      font-size: 0.62rem;
+      opacity: 0.65;
+      margin-top: 4px;
+    }
+
+    .msg-bubble.mine .msg-meta {
+      text-align: right;
+    }
+
+    .empty-msg {
+      text-align: center;
+      padding: 40px 16px;
+      color: rgba(42, 26, 31, 0.3);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+    }
+
+    .msg-form {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+      background: #fff;
+      border: 1px solid rgba(201, 120, 138, 0.22);
+      border-radius: 18px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 14px rgba(201, 120, 138, 0.08);
+    }
+
+    .msg-form textarea {
+      flex: 1;
+      border: none;
+      outline: none;
+      resize: none;
+      font-family: 'Jost', sans-serif;
+      font-size: 0.9rem;
+      color: var(--deep);
+      background: transparent;
+      min-height: 36px;
+      max-height: 120px;
+    }
+
+    .msg-form textarea::placeholder {
+      color: rgba(42, 26, 31, 0.28);
+    }
+
+    .send-btn {
+      background: var(--rose);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      padding: 8px 16px;
+      font-size: 1.15rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .send-btn:hover {
+      background: #b5697a;
+      transform: scale(1.05);
+    }
+
+    /* Photos */
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .photo-item {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .photo-item:hover img,
+    .photo-item:active img {
+      transform: scale(1.07);
+    }
+
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(42, 26, 31, 0.55) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 7px;
+    }
+
+    .photo-item:hover .photo-overlay,
+    .photo-item:active .photo-overlay {
+      opacity: 1;
+    }
+
+    .photo-caption {
+      color: #fff;
+      font-size: 0.68rem;
+      font-style: italic;
+    }
+
+    .upload-area {
+      border: 2px dashed rgba(201, 120, 138, 0.32);
+      border-radius: 16px;
+      padding: 32px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .upload-area:hover,
+    .upload-area:active {
+      border-color: var(--rose);
+      background: rgba(201, 120, 138, 0.04);
+    }
+
+    .upload-area .u-icon {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .upload-area .u-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--rose);
+      margin-bottom: 4px;
+    }
+
+    .upload-area .u-sub {
+      font-size: 0.75rem;
+      color: rgba(42, 26, 31, 0.4);
+    }
+
+    #fileInput {
+      display: none;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 92vw;
+      max-height: 86vh;
+      border-radius: 12px;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 18px;
+      right: 22px;
+      color: #fff;
+      font-size: 1.8rem;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      background: var(--deep);
+      color: var(--blush);
+      padding: 10px 22px;
+      border-radius: 24px;
+      font-size: 0.8rem;
+      letter-spacing: 0.06em;
+      transition: transform 0.3s;
+      z-index: 900;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .sec-label {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--rose);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, var(--rose), transparent);
+      opacity: 0.28;
+    }
+
+    ::-webkit-scrollbar {
+      width: 3px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(201, 120, 138, 0.25);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="petals" id="petals"></div>
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">✕</span>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <!-- ════ LOGIN ════ -->
+  <div class="login-screen" id="loginScreen">
+    <span class="login-logo">💕</span>
+    <div class="login-title">Nuestro Espacio</div>
+    <div class="login-sub">solo para ustedes dos</div>
+
+    <!-- Sesión guardada: solo toca para entrar -->
+    <div id="blockSaved"
+      style="display:none;flex-direction:column;align-items:center;gap:0;width:100%;max-width:320px;">
+      <div class="saved-card" onclick="enterWithSaved()">
+        <div class="saved-avatar" id="savedAvatar"></div>
+        <div class="saved-info">
+          <div class="saved-name" id="savedName"></div>
+          <div class="saved-hint">toca para entrar 💕</div>
+        </div>
+        <div class="saved-arrow">›</div>
+      </div>
+    </div>
+
+    <!-- Primer acceso: Entrar / Registrarse -->
+    <div id="blockFull" style="display:none;flex-direction:column;align-items:center;width:100%;max-width:320px;">
+      <div class="login-tabs">
+        <button class="ltab active" id="ltabEnter" onclick="switchLTab('enter')">Entrar</button>
+        <button class="ltab" id="ltabRegister" onclick="switchLTab('register')">Primera vez</button>
+      </div>
+      <div class="lpanel active" id="lpEnter">
+        <div class="lfield"><input type="text" id="lName" placeholder="Tu nombre" maxlength="30" autocomplete="off" />
+        </div>
+        <div class="lfield"><input type="password" id="lPass" placeholder="Contraseña secreta" maxlength="50"
+            autocomplete="off" onkeydown="if(event.key==='Enter') doLogin()" /></div>
+        <button class="lbtn" onclick="doLogin()">Entrar 💕</button>
+      </div>
+      <div class="lpanel" id="lpRegister">
+        <div class="lfield"><input type="text" id="rName" placeholder="Tu nombre" maxlength="30" autocomplete="off" />
+        </div>
+        <div class="lfield"><input type="password" id="rPass" placeholder="Contraseña para compartir" maxlength="50"
+            autocomplete="off" /></div>
+        <button class="lbtn" onclick="doRegister()">Crear sala 💕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ MAIN APP ════ -->
+  <div class="app" id="mainApp" style="display:none">
+    <header>
+      <span class="heart-anim">💕</span>
+      <div class="couple-names"><span id="name1">—</span><span class="couple-sep">&amp;</span><span id="name2">—</span>
+      </div>
+      <div class="header-sub">nuestro espacio</div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('counter',this)"><span class="ti">🗓️</span>Nosotros</button>
+      <button class="tab-btn" onclick="switchTab('messages',this)"><span class="ti">💌</span>Mensajes</button>
+      <button class="tab-btn" onclick="switchTab('photos',this)"><span class="ti">📸</span>Fotos</button>
+    </div>
+
+    <!-- Nosotros -->
+    <div class="tab-panel active" id="tab-counter">
+      <div class="counter-card">
+        <div class="days-num" id="daysNum">0</div>
+        <div class="days-label">días juntos</div>
+        <div class="since">Desde <span id="sinceDate">—</span></div>
+        <div class="precise">
+          <div class="tu">
+            <div class="tv" id="tH">00</div>
+            <div class="tl">horas</div>
+          </div>
+          <div class="ts">:</div>
+          <div class="tu">
+            <div class="tv" id="tM">00</div>
+            <div class="tl">minutos</div>
+          </div>
+          <div class="ts">:</div>
+          <div class="tu">
+            <div class="tv" id="tS">00</div>
+            <div class="tl">segundos</div>
+          </div>
+        </div>
+        <div class="date-setter" id="dateSetter">
+          <p>¿Desde cuándo están juntos?</p>
+          <div class="date-setter-row">
+            <input type="date" id="startDateInput" />
+            <button onclick="saveStartDate()">Guardar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-label">🎵 Nuestra canción</div>
+      <div class="music-card">
+        <div class="music-top">
+          <div class="music-disc" id="musicDisc">🎶</div>
+          <div class="music-info">
+            <div class="track-name" id="trackName">Sin canción aún</div>
+            <div class="track-sub" id="trackSub">agrega un link</div>
+          </div>
+          <div class="music-controls">
+            <button class="mbtn mute-btn" id="muteBtn" onclick="toggleMute()" title="Silenciar">🔊</button>
+            <button class="mbtn" id="playBtn" onclick="togglePlay()">▶</button>
+          </div>
+        </div>
+        <!-- YouTube player (hidden until a YT link is saved) -->
+        <div class="yt-wrap" id="ytWrap">
+          <iframe id="ytFrame" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+        <div class="music-url-row">
+          <input type="text" id="musicUrlInput" placeholder="Link de YouTube o URL directa de audio" />
+          <button onclick="saveMusic()">💾 Guardar</button>
+        </div>
+        <p class="music-hint">Puedes pegar un link de YouTube (ej: https://youtu.be/abc123) o una URL directa de un
+          archivo .mp3</p>
+      </div>
+      <audio id="audioPlayer" loop></audio>
+    </div>
+
+    <!-- Mensajes -->
+    <div class="tab-panel" id="tab-messages">
+      <div class="msg-list" id="msgList">
+        <div class="empty-msg">Aún no hay mensajes… ¡escribe el primero! 🌸</div>
+      </div>
+      <div class="msg-form">
+        <textarea id="msgInput" placeholder="Escribe algo bonito…" rows="1"
+          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage()}"></textarea>
+        <button class="send-btn" onclick="sendMessage()">💌</button>
+      </div>
+    </div>
+
+    <!-- Fotos -->
+    <div class="tab-panel" id="tab-photos">
+      <div class="photo-grid" id="photoGrid"></div>
+      <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+        <div class="u-icon">📷</div>
+        <div class="u-title">Agrega una foto juntos</div>
+        <div class="u-sub">toca aquí para elegir de tu galería</div>
+      </div>
+      <input type="file" id="fileInput" accept="image/*" onchange="uploadPhoto(this)" />
+    </div>
+  </div>
+
+  <!-- ══════════════════════════
+     FIREBASE — pon tu config
+     ══════════════════════════ -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, onSnapshot,
+      doc, setDoc, getDoc, query, orderBy, arrayUnion
+    }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL }
+      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js";
+
+    // ══════════════════════════
+    // 🔧 PON TU CONFIG AQUÍ
+    const firebaseConfig = {
+      apiKey: "AIzaSyBNS5Ie1Gbfu2KBVLvR2XKY86cLVUe9O7U",
+      authDomain: "loveappcya.firebaseapp.com",
+      projectId: "loveappcya",
+      storageBucket: "loveappcya.firebasestorage.app",
+      messagingSenderId: "294292776654",
+      appId: "1:294292776654:web:2f77edf0afb894b593929f"
+    };
+    // ══════════════════════════
+
+    const CFG = firebaseConfig.apiKey !== "TU_API_KEY";
+    let app, db, storage;
+    if (CFG) { app = initializeApp(firebaseConfig); db = getFirestore(app); storage = getStorage(app); }
+
+    let myName = '', roomId = '';
+    let audioMode = 'none'; // 'audio' | 'youtube'
+    let isPlaying = false, isMuted = false;
+    let startDate = null, ticker = null;
+
+    // ── Petals ──
+    ['🌸', '💕', '✨', '🌷', '💗', '🌺'].forEach(e => {
+      for (let j = 0; j < 3; j++) {
+        const p = document.createElement('div'); p.className = 'petal'; p.textContent = e;
+        p.style.cssText = `left:${Math.random() * 100}vw;font-size:${0.7 + Math.random() * 0.7}rem;animation-duration:${9 + Math.random() * 10}s;animation-delay:${Math.random() * 14}s`;
+        document.getElementById('petals').appendChild(p);
+      }
+    });
+
+    // ════ LOGIN ════
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const s = getSession();
+      if (s) {
+        document.getElementById('savedAvatar').textContent = s.name.charAt(0).toUpperCase();
+        document.getElementById('savedName').textContent = s.name;
+        document.getElementById('blockSaved').style.display = 'flex';
+      } else {
+        document.getElementById('blockFull').style.display = 'flex';
+      }
+    });
+
+    function getSession() {
+      const n = localStorage.getItem('la_name'), r = localStorage.getItem('la_room');
+      return (n && r) ? { name: n, room: r } : null;
+    }
+
+    window.enterWithSaved = function () {
+      const s = getSession(); myName = s.name; roomId = s.room; launch();
+    };
+
+    window.switchLTab = function (tab) {
+      document.getElementById('lpEnter').classList.toggle('active', tab === 'enter');
+      document.getElementById('lpRegister').classList.toggle('active', tab === 'register');
+      document.getElementById('ltabEnter').classList.toggle('active', tab === 'enter');
+      document.getElementById('ltabRegister').classList.toggle('active', tab === 'register');
+    };
+
+    window.doRegister = async function () {
+      const name = document.getElementById('rName').value.trim();
+      const pass = document.getElementById('rPass').value.trim();
+      if (!name || !pass) { showToast('Completa nombre y contraseña 💕'); return; }
+      myName = name; roomId = mkRoom(pass);
+      localStorage.setItem('la_name', name); localStorage.setItem('la_room', roomId);
+      if (CFG) await setDoc(doc(db, roomId, 'members'), { names: arrayUnion(name) }, { merge: true });
+      launch();
+    };
+
+    window.doLogin = async function () {
+      const name = document.getElementById('lName').value.trim();
+      const pass = document.getElementById('lPass').value.trim();
+      if (!name || !pass) { showToast('Completa nombre y contraseña 💕'); return; }
+      myName = name; roomId = mkRoom(pass);
+      localStorage.setItem('la_name', name); localStorage.setItem('la_room', roomId);
+      if (CFG) await setDoc(doc(db, roomId, 'members'), { names: arrayUnion(name) }, { merge: true });
+      launch();
+    };
+
+    function mkRoom(pass) {
+      return 'room_' + btoa(encodeURIComponent(pass)).replace(/[^a-zA-Z0-9]/g, '').slice(0, 20);
+    }
+
+    // ════ LAUNCH ════
+
+    function launch() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      document.getElementById('name1').textContent = myName;
+      document.getElementById('name2').textContent = '…';
+      initRoom();
+    }
+
+    async function initRoom() {
+      if (!CFG) { loadLocal(); return; }
+      onSnapshot(doc(db, roomId, 'members'), snap => {
+        if (!snap.exists()) return;
+        const others = (snap.data().names || []).filter(n => n !== myName);
+        if (others.length) document.getElementById('name2').textContent = others[others.length - 1];
+      });
+      await loadSettings();
+      listenMessages();
+      watchPhotos();
+    }
+
+    // ════ SETTINGS ════
+
+    async function loadSettings() {
+      if (!CFG) { loadLocalSettings(); return; }
+      const snap = await getDoc(doc(db, roomId, 'settings'));
+      if (!snap.exists()) return;
+      const d = snap.data();
+      if (d.startDate) applyDate(d.startDate);
+      if (d.musicUrl) applyMusic(d.musicUrl, d.musicName || '');
+    }
+
+    // ════ COUNTER ════
+
+    window.saveStartDate = async function () {
+      const val = document.getElementById('startDateInput').value;
+      if (!val) return;
+      if (CFG) await setDoc(doc(db, roomId, 'settings'), { startDate: val }, { merge: true });
+      else localStorage.setItem('la_sd_' + roomId, val);
+      applyDate(val); showToast('¡Fecha guardada para siempre! 💕');
+    };
+
+    function applyDate(str) {
+      const [y, m, d] = str.split('-').map(Number);
+      startDate = new Date(y, m - 1, d, 0, 0, 0, 0);
+      document.getElementById('sinceDate').textContent =
+        startDate.toLocaleDateString('es', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('dateSetter').style.display = 'none';
+      if (ticker) clearInterval(ticker);
+      tick(); ticker = setInterval(tick, 1000);
+    }
+
+    function tick() {
+      if (!startDate) return;
+      const s = Math.floor((Date.now() - startDate.getTime()) / 1000);
+      if (s < 0) return;
+      document.getElementById('daysNum').textContent = Math.floor(s / 86400);
+      document.getElementById('tH').textContent = pad(Math.floor((s % 86400) / 3600));
+      document.getElementById('tM').textContent = pad(Math.floor((s % 3600) / 60));
+      document.getElementById('tS').textContent = pad(s % 60);
+    }
+    const pad = n => String(n).padStart(2, '0');
+
+    // ════ MUSIC ════
+
+    const audio = document.getElementById('audioPlayer');
+    const playBtn = document.getElementById('playBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const disc = document.getElementById('musicDisc');
+    const ytWrap = document.getElementById('ytWrap');
+    const ytFrame = document.getElementById('ytFrame');
+
+    window.saveMusic = async function () {
+      const url = document.getElementById('musicUrlInput').value.trim();
+      if (!url) return;
+      const ytId = extractYouTubeId(url);
+      const name = ytId ? 'Nuestra canción ♪' :
+        (decodeURIComponent(url.split('/').pop().split('?')[0]).replace(/\.[^.]+$/, '') || 'Nuestra canción');
+      if (CFG) await setDoc(doc(db, roomId, 'settings'), { musicUrl: url, musicName: name }, { merge: true });
+      else localStorage.setItem('la_music_' + roomId, JSON.stringify({ url, name }));
+      applyMusic(url, name); showToast('Canción guardada 🎵');
+    };
+
+    function extractYouTubeId(url) {
+      const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([A-Za-z0-9_-]{11})/);
+      return m ? m[1] : null;
+    }
+
+    function applyMusic(url, name) {
+      document.getElementById('trackName').textContent = name || 'Nuestra canción';
+      document.getElementById('musicUrlInput').value = url;
+      const ytId = extractYouTubeId(url);
+
+      if (ytId) {
+        // YouTube mode
+        audioMode = 'youtube';
+        audio.pause(); audio.src = '';
+        // autoplay=1 mute=0 — browser may still require interaction
+        ytFrame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&loop=1&playlist=${ytId}&controls=1&rel=0`;
+        ytWrap.classList.add('visible');
+        isPlaying = true;
+        setPlayUI(true);
+        document.getElementById('trackSub').textContent = 'youtube';
+        // mute button controls iframe via postMessage
+      } else {
+        // Audio file mode
+        audioMode = 'audio';
+        ytWrap.classList.remove('visible');
+        ytFrame.src = '';
+        audio.src = url;
+        audio.muted = isMuted;
+        audio.play().then(() => { isPlaying = true; setPlayUI(true); })
+          .catch(() => {
+            document.getElementById('trackSub').textContent = 'toca ▶ para reproducir';
+            document.addEventListener('click', function once() {
+              if (!isPlaying) audio.play().then(() => { isPlaying = true; setPlayUI(true); }).catch(() => { });
+              document.removeEventListener('click', once);
+            });
+          });
+      }
+    }
+
+    window.togglePlay = function () {
+      if (!document.getElementById('musicUrlInput').value.trim()) { showToast('Agrega un link primero'); return; }
+      if (audioMode === 'youtube') {
+        // For YouTube embed we show/hide the iframe
+        if (isPlaying) {
+          ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
+        } else {
+          ytFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+        }
+        isPlaying = !isPlaying; setPlayUI(isPlaying);
+      } else {
+        isPlaying ? audio.pause() : audio.play();
+        isPlaying = !isPlaying; setPlayUI(isPlaying);
+      }
+    };
+
+    window.toggleMute = function () {
+      isMuted = !isMuted;
+      if (audioMode === 'audio') {
+        audio.muted = isMuted;
+      } else {
+        // YouTube: postMessage mute/unmute
+        const cmd = isMuted ? 'mute' : 'unMute';
+        ytFrame.contentWindow.postMessage(`{"event":"command","func":"${cmd}","args":""}`, '*');
+      }
+      muteBtn.textContent = isMuted ? '🔇' : '🔊';
+      muteBtn.classList.toggle('muted', isMuted);
+    };
+
+    function setPlayUI(playing) {
+      playBtn.textContent = playing ? '⏸' : '▶';
+      playing ? disc.classList.add('playing') : disc.classList.remove('playing');
+      if (audioMode !== 'youtube') {
+        document.getElementById('trackSub').textContent = playing ? 'reproduciendo…' : 'pausada';
+      }
+    }
+
+    // ════ MESSAGES ════
+
+    window.sendMessage = async function () {
+      const txt = document.getElementById('msgInput').value.trim(); if (!txt) return;
+      document.getElementById('msgInput').value = ''; document.getElementById('msgInput').style.height = 'auto';
+      const msg = { text: txt, author: myName, ts: Date.now() };
+      if (CFG) await addDoc(collection(db, roomId, 'messages', 'list'), msg);
+      else { const m = getLocal('la_msgs_' + roomId); m.push(msg); setLocal('la_msgs_' + roomId, m); renderMsgs(m); }
+    };
+
+    function listenMessages() {
+      onSnapshot(query(collection(db, roomId, 'messages', 'list'), orderBy('ts', 'asc')),
+        s => renderMsgs(s.docs.map(d => d.data())));
+    }
+
+    function renderMsgs(msgs) {
+      const el = document.getElementById('msgList');
+      if (!msgs.length) { el.innerHTML = '<div class="empty-msg">Aún no hay mensajes… ¡escribe el primero! 🌸</div>'; return; }
+      el.innerHTML = msgs.map(m => `
+      <div class="msg-bubble ${m.author === myName ? 'mine' : 'theirs'}">
+        ${esc(m.text)}<div class="msg-meta">${m.author} · ${fmt(m.ts)}</div>
+      </div>`).join('');
+      el.scrollTop = el.scrollHeight;
+    }
+
+    // ════ PHOTOS ════
+
+    window.uploadPhoto = async function (input) {
+      const file = input.files[0]; if (!file) return;
+      showToast('Subiendo foto… 📸');
+      if (CFG) {
+        const r2 = ref(storage, `${roomId}/${Date.now()}_${file.name}`);
+        await uploadBytes(r2, file);
+        const url = await getDownloadURL(r2);
+        await addDoc(collection(db, roomId, 'photos', 'list'), { url, author: myName, ts: Date.now() });
+        showToast('¡Foto guardada! 💕');
+      } else {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const ph = getLocal('la_photos_' + roomId);
+          ph.push({ url: e.target.result, author: myName, ts: Date.now() });
+          setLocal('la_photos_' + roomId, ph); renderPhotos(ph);
+          showToast('¡Foto guardada! 💕');
+        };
+        reader.readAsDataURL(file);
+      }
+      input.value = '';
+    };
+
+    function watchPhotos() {
+      if (!CFG) { renderPhotos(getLocal('la_photos_' + roomId)); return; }
+      onSnapshot(query(collection(db, roomId, 'photos', 'list'), orderBy('ts', 'asc')),
+        s => renderPhotos(s.docs.map(d => d.data())));
+    }
+
+    function renderPhotos(photos) {
+      document.getElementById('photoGrid').innerHTML = photos.map((p, i) => `
+      <div class="photo-item" style="animation-delay:${i * .05}s" onclick="openLightbox('${p.url}')">
+        <img src="${p.url}" alt="foto" loading="lazy"/>
+        <div class="photo-overlay"><span class="photo-caption">${p.author}</span></div>
+      </div>`).join('');
+    }
+
+    window.openLightbox = u => { document.getElementById('lightboxImg').src = u; document.getElementById('lightbox').classList.add('open'); };
+    window.closeLightbox = () => document.getElementById('lightbox').classList.remove('open');
+
+    // ════ TABS ════
+
+    window.switchTab = function (id, btn) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active'); btn.classList.add('active');
+      if (id === 'messages') setTimeout(() => { const l = document.getElementById('msgList'); l.scrollTop = l.scrollHeight; }, 80);
+    };
+
+    // ════ LOCAL ════
+
+    function loadLocal() { loadLocalSettings(); renderMsgs(getLocal('la_msgs_' + roomId)); renderPhotos(getLocal('la_photos_' + roomId)); }
+    function loadLocalSettings() {
+      const sd = localStorage.getItem('la_sd_' + roomId); if (sd) applyDate(sd);
+      const raw = localStorage.getItem('la_music_' + roomId); if (raw) { const m = JSON.parse(raw); applyMusic(m.url, m.name); }
+    }
+    function getLocal(k) { try { return JSON.parse(localStorage.getItem(k) || '[]'); } catch (e) { return []; } }
+    function setLocal(k, v) { localStorage.setItem(k, JSON.stringify(v)); }
+
+    // ════ UTILS ════
+
+    window.showToast = m => {
+      const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 2800);
+    };
+    function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>'); }
+    function fmt(ts) {
+      const d = new Date(ts), diff = Date.now() - ts;
+      if (diff < 60000) return 'ahora';
+      if (diff < 3600000) return Math.floor(diff / 60000) + 'm';
+      if (diff < 86400000) return d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+      return d.toLocaleDateString('es', { day: 'numeric', month: 'short' }) + ' ' + d.toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit' });
+    }
+  </script>
+</body>
+
+</html>
