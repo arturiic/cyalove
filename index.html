@@ -1294,7 +1294,7 @@
         audioMode = 'youtube';
         audio.pause(); audio.src = '';
         // autoplay=1 mute=0 — browser may still require interaction
-        ytFrame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&loop=1&playlist=${ytId}&controls=1&rel=0`;
+        ytFrame.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&loop=1&playlist=${ytId}&controls=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(location.origin)}`;
         ytWrap.classList.add('visible');
         isPlaying = true;
         setPlayUI(true);
@@ -1318,15 +1318,16 @@
       }
     }
 
+    function ytCmd(func) {
+      try {
+        ytFrame.contentWindow.postMessage(JSON.stringify({ event: 'command', func, args: [] }), '*');
+      } catch(e) {}
+    }
+
     window.togglePlay = function () {
       if (!document.getElementById('musicUrlInput').value.trim()) { showToast('Agrega un link primero'); return; }
       if (audioMode === 'youtube') {
-        // For YouTube embed we show/hide the iframe
-        if (isPlaying) {
-          ytFrame.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-        } else {
-          ytFrame.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
-        }
+        isPlaying ? ytCmd('pauseVideo') : ytCmd('playVideo');
         isPlaying = !isPlaying; setPlayUI(isPlaying);
       } else {
         isPlaying ? audio.pause() : audio.play();
@@ -1340,8 +1341,7 @@
         audio.muted = isMuted;
       } else {
         // YouTube: postMessage mute/unmute
-        const cmd = isMuted ? 'mute' : 'unMute';
-        ytFrame.contentWindow.postMessage(`{"event":"command","func":"${cmd}","args":""}`, '*');
+        ytCmd(isMuted ? 'mute' : 'unMute');
       }
       const muteIcon = document.getElementById('muteIcon');
       if (muteIcon) {
